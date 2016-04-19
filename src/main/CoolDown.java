@@ -37,7 +37,7 @@ public class CoolDown extends Thread {
         coolDownMap.put(skill, this);
         try {
             long sleepTime = (long) (cooldowns[skill.getId()] + offset);
-            if (skill == Skill.BURN) {
+            if (skill == Skill.BURN || skill == Skill.BUFF) {
                 System.out.println(skill + " available");
                 Availability.setAvailable(skill);
                 this.sleep(sleepTime);
