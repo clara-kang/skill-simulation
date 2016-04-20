@@ -7,18 +7,9 @@ import java.util.HashMap;
  */
 public class CoolDown extends Thread {
 
-    private static int[] cooldowns = {45000, 30000, 45000, 18000, 0, 0, 0, 0, 0, 0, 6000, 15000};
     private Skill skill;
     private double offset;
     private static HashMap<Skill, CoolDown> coolDownMap = new HashMap<>();
-
-    public static int[] getCooldowns() {
-        return cooldowns;
-    }
-
-    public static int getCoolDown(Skill skill) {
-        return cooldowns[skill.getId()];
-    }
 
     public CoolDown(Skill skill, double offset) {
         this.skill = skill;
@@ -36,7 +27,7 @@ public class CoolDown extends Thread {
         }
         coolDownMap.put(skill, this);
         try {
-            long sleepTime = (long) (cooldowns[skill.getId()] + offset);
+            long sleepTime = (long) (skill.getCooldown() + offset);
             if (skill == Skill.BURN || skill == Skill.BUFF) {
                 System.out.println(skill + " available");
                 Availability.setAvailable(skill);
