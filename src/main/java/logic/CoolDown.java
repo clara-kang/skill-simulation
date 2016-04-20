@@ -1,4 +1,4 @@
-package main;
+package logic;
 
 import java.util.HashMap;
 
@@ -9,7 +9,7 @@ public class CoolDown extends Thread {
 
     private Skill skill;
     private double offset;
-    private static HashMap<Skill, CoolDown> coolDownMap = new HashMap<>();
+    private static HashMap<Skill, CoolDown> coolDownMap = new HashMap<Skill, CoolDown>();
 
     public CoolDown(Skill skill, double offset) {
         this.skill = skill;

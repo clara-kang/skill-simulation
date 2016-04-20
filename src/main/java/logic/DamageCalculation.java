@@ -1,13 +1,12 @@
-package main;
+package logic;
 
-/**
- * Created by Clara on 2016-04-17.
- */
+import javax.websocket.Session;
+
 public class DamageCalculation {
 
     private static Skill[] orderedSkills = {Skill.C, Skill.X, Skill.ONE, Skill.V, Skill.FFF, Skill.FDB, Skill.FDD, Skill.TWO};
 
-    public static void main(String[] args) throws Exception{
+    public static void calculateDamage(Session session) throws Exception{
 
         int sum = 0;
 
@@ -28,6 +27,7 @@ public class DamageCalculation {
                  Thread.sleep(400);
             }
             System.out.println("cumulated damage" + sum);
+            session.getBasicRemote().sendText("cumulated damage" + sum);
         }
     }
 }

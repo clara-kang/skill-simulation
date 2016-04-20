@@ -1,4 +1,4 @@
-package main;
+package logic;
 
 /**
  * Created by Clara on 2016-04-14.
