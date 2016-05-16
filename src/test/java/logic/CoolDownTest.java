@@ -6,6 +6,8 @@ public class CoolDownTest {
 
     private long WAIT_TIME = 200;
 
+    //todo figure out a way to test with mock session
+    @Ignore("not ready yet")
     @Test public void testRun() throws Exception {
         Skill testSkill = Skill.BURN;
         CoolDown first = new CoolDown(testSkill, 0);

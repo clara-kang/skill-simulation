@@ -2,32 +2,72 @@ package logic;
 
 import javax.websocket.Session;
 
-public class DamageCalculation {
+public class DamageCalculation extends Thread{
 
-    private static Skill[] orderedSkills = {Skill.C, Skill.X, Skill.ONE, Skill.V, Skill.FFF, Skill.FDB, Skill.FDD, Skill.TWO};
+    private static Skill[] orderedSkills = {Skill.C, Skill.X, Skill.ONE, Skill.V, Skill.TWO};
+    private static Session session;
+    private static DamageCalculation calculationThread;
+    private int totalDamage = 0;
+    private long startingTime;
 
-    public static void calculateDamage(Session session) throws Exception{
+    private DamageCalculation(Session session, long startingTime) {
+        this.session = session;
+        this.startingTime = startingTime;
+    }
 
-        int sum = 0;
+    public static Session getSession() {
+        return session;
+    }
+    public static void calculateDamage(Session session, long startingTime) throws Exception{
+        calculationThread = new DamageCalculation(session, startingTime);
+        calculationThread.start();
+    }
 
-        while (true) {
-             for (Skill skill : orderedSkills) {
-                 if (Availability.isAvailable(skill)) {
-                    if (skill == Skill.ONE && Availability.isAvailable(Skill.BURN)) {
-                        continue;
+    public void run(){
+        totalDamage = 0;
+        int skillDamage;
+        try {
+            while (true) {
+                for (Skill skill : orderedSkills) {
+                    if (Availability.isAvailable(skill)) {
+                        skillDamage = Cast.getSkillDamage(skill);
+                        if(skillDamage == 0) {
+                            continue;
+                        }
+                        totalDamage += skillDamage;
+                        //System.out.println("SkillDamage:" + skill + ":" + skillDamage);
+                        session.getBasicRemote().sendText("totalDamage:" + totalDamage);
+                        sleep(400);
+
+                        skillDamage = Cast.getSkillDamage(Skill.L);
+                        totalDamage += skillDamage;
+                        session.getBasicRemote().sendText("totalDamage:" + totalDamage);
+                        sleep(400);
+
+                        skillDamage = Cast.getSkillDamage(Skill.R);
+                        totalDamage += skillDamage;
+                        session.getBasicRemote().sendText("totalDamage:" + totalDamage);
+                        sleep(400);
+                        break;
                     }
-                    sum += Cast.getSkillDamage(skill);
-                     Thread.sleep(400);
-                    sum += Cast.getSkillDamage(Skill.L);
-                     Thread.sleep(400);
-                    sum += Cast.getSkillDamage(Skill.R);
-                     Thread.sleep(400);
-                    break;
+                    sleep(400);
                 }
-                 Thread.sleep(400);
             }
-            System.out.println("cumulated damage" + sum);
-            session.getBasicRemote().sendText("cumulated damage" + sum);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    public static void stopCalculating(long endTime) {
+        if(calculationThread != null) {
+            calculationThread.interrupt();
+        }
+        long damagePerSecond = calculationThread.totalDamage * 1000 / (endTime - calculationThread.startingTime);
+        try {
+            session.getBasicRemote().sendText("damagePerSecond:" + damagePerSecond);
+        }catch (Exception e) {
+            e.printStackTrace();
         }
     }
 }

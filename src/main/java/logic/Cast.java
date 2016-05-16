@@ -1,5 +1,6 @@
 package logic;
 
+import java.io.IOException;
 import java.util.Random;
 
 /**
@@ -21,10 +22,13 @@ public class Cast {
     }
 
     private static int buffed(int damage) {
+        if(damage == 0) {
+            return 0;
+        }
         return (int) (damage * 1.4 + 100);
     }
 
-    public static int getSkillDamage(Skill skill) throws InterruptedException{
+    public static int getSkillDamage(Skill skill) throws InterruptedException, IOException{
         System.out.println("press" + skill);
         int damage;
         switch (skill) {
@@ -36,15 +40,6 @@ public class Cast {
                 break;
             case V:
                 damage = pressV();
-                break;
-            case FDD:
-                damage = pressFDD();
-                break;
-            case FFF:
-                damage = pressFFF();
-                break;
-            case FDB:
-                damage = pressFDB();
                 break;
             case ONE:
                 damage = pressOne();
@@ -68,93 +63,125 @@ public class Cast {
         return damage;
     }
 
-    private static int pressX() {
+    private static int pressX() throws IOException{
         burn(0);
         int add = generateBetween(223, 243) * Item.getEmber();
         Item.setEmber(0);
         CoolDown.startCoolDown(Skill.X, 0);
-        return generateBetween(6848, 7587) + add;
+        int XDamage = generateBetween(6848, 7587) + add;
+        DamageCalculation.getSession().getBasicRemote().sendText("SkillDamage:" + Skill.X + ":" + XDamage);
+        return XDamage;
     }
 
-    private static int pressC() {
+    private static int pressC() throws IOException{
         burn(4000);
         CoolDown.startCoolDown(Skill.C, 0);
-        return generateBetween(5191, 5751);
+        int CDamage = generateBetween(5191, 5751);
+        DamageCalculation.getSession().getBasicRemote().sendText("SkillDamage:" + Skill.C + ":" + CDamage);
+        return CDamage;
     }
 
-    private static int pressV() {
+    private static int pressV() throws IOException{
         Item.increaseEmber(3);
         CoolDown.startCoolDown(Skill.V, 0);
-        return generateBetween(6223, 6895);
+        int VDamage = generateBetween(6223, 6895);
+        DamageCalculation.getSession().getBasicRemote().sendText("SkillDamage:" + Skill.V + ":" + VDamage);
+        return VDamage;
     }
 
-    private static int pressFDD() {
+    private static int pressFDD() throws IOException{
         Item.increaseEmber(5);
+        Item.setIceOrbit(0);
         CoolDown.startCoolDown(Skill.FDD, 0);
-        return generateBetween(9350, 10358);
+        int FDDDamage = generateBetween(9350, 10358);
+        DamageCalculation.getSession().getBasicRemote().sendText("SkillDamage:" + Skill.FDD + ":" + FDDDamage);
+        return FDDDamage;
     }
 
-    private static int pressFFF() {
-        //CoolDown.startCoolDown(Skill.FFF, 0);
+    private static int pressFFF() throws IOException{
+        Skill next;
+        if(!Availability.isAvailable(Skill.BUFF)){
+            next = Skill.FDB;
+        } else if(Availability.isAvailable(Skill.FDD)){
+            next = Skill.FDD;
+        } else {
+            return 0;
+        }
         int add = 0;
         if (Availability.isAvailable(Skill.BURN)) {
             add = generateBetween(547, 603);
         }
-        return generateBetween(2353, 2605) + add;
-    }
+        int FFFDamage = generateBetween(2353, 2605) + add;
+        DamageCalculation.getSession().getBasicRemote().sendText("SkillDamage:" + Skill.FFF + ":" + FFFDamage);
 
-    private static int pressFDB() {
-        //CoolDown.startCoolDown(Skill.FDB, 0);
-        Item.increaseEmber(5);
-        CoolDown.startCoolDown(Skill.BUFF, 0);
-        int add = 0;
-        if (Availability.isAvailable(Skill.BURN)) {
-            add = generateBetween(1063, 1175);
+        if(next == Skill.FDB) {
+            FFFDamage += pressFDB();
+        } else if(next == Skill.FDD) {
+            FFFDamage += pressFDD();
         }
-        return generateBetween(4675, 5179) + add;
+        return FFFDamage;
     }
 
-    private static int pressOne() {
-        if (Item.getEmber() == Item.EMBER_MAX) {
+    private static int pressFDB() throws IOException {
+        if (!Availability.isAvailable(Skill.BUFF)) {
+            Item.increaseEmber(5);
+            CoolDown.startCoolDown(Skill.BUFF, 0);
+            int add = 0;
+            if (Availability.isAvailable(Skill.BURN)) {
+                add = generateBetween(1063, 1175);
+            }
+            int FDBDamage = generateBetween(4675, 5179) + add;
+            DamageCalculation.getSession().getBasicRemote().sendText("SkillDamage:" + Skill.FDB + ":" + FDBDamage);
+            return FDBDamage;
+        }
+        return 0;
+    }
+
+    private static int pressOne() throws IOException {
+        if (Item.getEmber() == Item.EMBER_MAX && !Availability.isAvailable(Skill.BURN)) {
+            Item.setEmber(0);
             burn(0);
+            DamageCalculation.getSession().getBasicRemote().sendText("SkillDamage:" + Skill.ONE + ":" + 5400);
+            return 5400;
         }
-        return 5400;
+        return 0;
     }
 
-    private static int pressTwo() {
+    private static int pressTwo() throws IOException{
         Item.increaseEmber(1);
         int add = 0;
         if (Availability.isAvailable(Skill.BURN)) {
             add = generateBetween(2095, 2319);
         }
-        return generateBetween(3127, 3463) + add;
+        int TWODamage = generateBetween(3127, 3463) + add;
+        DamageCalculation.getSession().getBasicRemote().sendText("SkillDamage:" + Skill.TWO + ":" + TWODamage);
+        System.out.println("TTTTTTTTTTTTTWWWWWWWWWWOOOOOOOOOO!!!");
+        return TWODamage;
     }
 
-    private static int pressL() {
+    private static int pressL() throws IOException{
+        boolean critical = false;
         Item.increaseEmber(1);
-        int accDamage = 0;
+        int LDamage = generateBetween(1713, 1892);
         if (tossDice(0.5688)) {
-            if (Availability.isAvailable(Skill.FDD) && Item.getIceOrbit() == 3) {
-                accDamage = accDamage + pressFFF() + pressFDD();
-            } else if (!Availability.isAvailable(Skill.BUFF)) {
-                accDamage = accDamage + pressFFF() + pressFDB();
-            }
-            accDamage += (int)(generateBetween(1713, 1892) * 1.9755);
+            critical = true;
+            LDamage = (int)(LDamage * 1.9755);
         }
         if (Availability.isAvailable(Skill.BURN)) {
-            accDamage += generateBetween(960, 1061);
+            LDamage += generateBetween(960, 1061);
         }
-        return accDamage;
+        DamageCalculation.getSession().getBasicRemote().sendText("SkillDamage:" + Skill.L + ":" + LDamage);
+        if(critical) LDamage += pressFFF();
+        return LDamage;
     }
 
-    private static int pressR() {
+    private static int pressR() throws IOException{
         if (tossDice(0.5688)) {
             Item.increaseIceOrbit(1);
         }
-        return generateBetween(805, 889);
+        int RDamage = generateBetween(805, 889);
+        DamageCalculation.getSession().getBasicRemote().sendText("SkillDamage:" + Skill.R + ":" + RDamage);
+        return RDamage;
     }
 
-    public static void main(String[] args) {
-        System.out.println(generateBetween(0, 3));
-    }
 }

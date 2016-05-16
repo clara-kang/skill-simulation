@@ -1,0 +1,159 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <title>Skill Simulation</title>
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="mystyle.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+    <script src="client.js"></script>
+    <script type="text/javascript">
+    </script>
+
+</head>
+
+<body background="https://itzdarkvoid.files.wordpress.com/2016/01/blade-and-soul.jpg" onload="WebSocketTest()" onunload="stopCalculating()">
+<!-- Modal -->
+<div class="modal fade" id="myModal" role="dialog">
+    <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Damage per Second</h4>
+            </div>
+            <div class="modal-body">
+                <center><h4 id="damagePerSecond"></h4></center>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<div class="container" style="margin-top:50px">
+    <div class="jumbotron">
+        <div class="row">
+            <h2>Total Damage</h2>
+            <div class="well" id="totalDamage" style="font-size:30px;text-align:center">
+                0
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-2" style="margin:0 0 0 0; padding:0 0 0 0;height:50px">
+                <h3>Ember</h3>
+            </div>
+            <div class="col-md-2" style="margin:0 0 0 0; padding:0 0 0 0;height:50px;position:relative;">
+                <div id="ember1" class="indicator" style="left:0;"></div>
+                <div id="ember2" class="indicator" style="left:35px;"></div>
+                <div id="ember3" class="indicator" style="left:70px;"></div>
+                <div id="ember4" class="indicator" style="left:105px;"></div>
+                <div id="ember5" class="indicator" style="left:140px;"></div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-2" style="margin:0 0 0 0; padding:0 0 0 0;height:50px">
+                <h3>Ice Orbit</h3>
+            </div>
+            <div class="col-md-2" style="margin:0 0 0 0; padding:0 0 0 0;height:50px;position:relative;">
+                <div id="iceOrbit1" class="indicator" style="left:0"></div>
+                <div id="iceOrbit2" class="indicator" style="left:35px"></div>
+                <div id="iceOrbit3" class="indicator" style="left:70px"></div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-8" style="margin:0 0 0 0; padding:0 0 0 0">
+                <div class="skills">
+                    <div class="skill"></div>
+                    <div class="skill">
+                        <div id="FDDDamage" class="damage"></div>
+                        <div class="skill-image" id="FDD" style="background-image:url('http://dummyimage.com/60x60/6991AA/fff&text=FDD')">
+                        </div>
+                    </div>
+                    <div class="skill"></div>
+                    <div class="skill"></div>
+                    <div class="skill"></div>
+                    <div class="skill"></div>
+                    <span class="stretch"></span>
+                </div>
+                <div class="skills">
+                    <div class="skill">
+                        <div id="FFFDamage" class="damage"></div>
+                        <div class="skill-image" id="FFF" style="background-image:url('http://dummyimage.com/60x60/6991AA/fff&text=FFF')"></div>
+                    </div>
+                    <div class="skill">
+                        <div id="FDBDamage" class="damage"></div>
+                        <div class="skill-image" id="FDB" style="background-image:url('http://dummyimage.com/60x60/6991AA/fff&text=FDB')"></div>
+                    </div>
+                    <div class="skill">
+                        <div id="ONEDamage" class="damage"></div>
+                        <div class="skill-image" id="ONE" style="background-image:url('http://dummyimage.com/60x60/6991AA/fff&text=1')"></div>
+                    </div>
+                    <div class="skill">
+                        <div id="TWODamage" class="damage"></div>
+                        <div class="skill-image" id="TWO" style="background-image:url('http://dummyimage.com/60x60/6991AA/fff&text=2')"></div>
+                    </div>
+                    <div class="skill">
+                        <div id="LDamage" class="damage"></div>
+                        <div class="skill-image" id="L" style="background-image:url('http://dummyimage.com/60x60/6991AA/fff&text=L')"></div>
+                    </div>
+                    <div class="skill">
+                        <div id="RDamage" class="damage"></div>
+                        <div class="skill-image" id="R" style="background-image:url('http://dummyimage.com/60x60/6991AA/fff&text=R')"></div>
+                    </div>
+                    <span class="stretch"></span>
+                </div>
+                <div class="skills">
+                    <div class="skill"></div>
+                    <div class="skill"></div>
+                    <div class="skill"></div>
+                    <div class="skill">
+                        <div id="XDamage" class="damage"></div>
+                        <div class="skill-image" id="X" style="background-image:url('http://dummyimage.com/60x60/6991AA/fff&text=X')"></div>
+                    </div>
+                    <div class="skill">
+                        <div id="CDamage" class="damage"></div>
+                        <div class="skill-image" id="C" style="background-image:url('http://dummyimage.com/60x60/6991AA/fff&text=C')"></div>
+                    </div>
+                    <div class="skill">
+                        <div id="VDamage" class="damage"></div>
+                        <div class="skill-image" id="V" style="background-image:url('http://dummyimage.com/60x60/6991AA/fff&text=V')"></div>
+                    </div>
+                    <span class="stretch"></span>
+                </div>
+            </div>
+            <div class="col-md-4" style="margin:0 0 0 0; padding:0 0 0 0">
+                <div class="skills2">
+                    <div class="skill" style="float:right">
+                    </div>
+                </div>
+                <div class="skills2">
+                    <div class="skill" style="float:right">
+                        <div class="damage"><span></span></div>
+                        <div class="skill-image" id="BURN" style="background-image:url('http://dummyimage.com/60x60/6991AA/fff&text=BURN')">
+                            <div id="BURNUnavailable" class="skill-image-countdown"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="skills2">
+                    <div class="skill" style="float:right">
+                        <div class="damage"><span></span></div>
+                        <div class="skill-image" id="BUFF" style="background-image:url('http://dummyimage.com/60x60/6991AA/fff&text=BUFF')">
+                            <div id="BUFFUnavailable" class="skill-image-countdown"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div style="margin-top:50px; width:100%; text-align: center;">
+                <button type="button" class="btn btn-primary" style="width:49%; display:inline-block;" onclick='javascript: startCalculating()'>Start</button>
+                <button type="button" class="btn btn-primary" style="width:49%; display:inline-block;" onclick="javascript: stopCalculating()">Stop</button>
+            <!--<button type="button" class="btn btn-primary" onclick="javascript:test()">test</button>-->
+        </div>
+    </div>
+</div>
+</body>
+</html>

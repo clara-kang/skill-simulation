@@ -1,0 +1,101 @@
+.skills {
+    height: 100px;
+
+    text-align: justify;
+    -ms-text-justify: distribute-all-lines;
+    text-justify: distribute-all-lines;
+
+    margin: 10px 0 10px 0;
+    /*padding: 5px 0 5px 0;*/
+    /* just for demo */
+}
+
+.skill {
+        width: 60px;
+        height: 100px;
+        margin: 0 0 0 0;
+        padding: 0 0 0 0;
+        vertical-align: top;
+        display: inline-block;
+        *display: inline;
+        zoom: 1;
+        position: relative;
+}
+
+.skill-image {
+        border-radius: 3px;
+        margin: 0 0 0 0;
+        width: 60px;
+        height: 60px;
+        box-shadow: 0 0 5px 2px rgba(133, 173, 173,1.0);
+}
+
+.skill-image-countdown {
+        background-color: rgba(0, 0, 0, 0.5);
+        margin: 0 0 0 0;
+        width:100%;
+        height:100%;
+        border-radius: 3px;
+        color:white;font-size:40px;
+        text-align:center;
+}
+
+.skills2 {
+        height:100px;
+        margin: 10px 0 10px 0;
+}
+
+.damage {
+        width: 100%;
+        height: 40px;
+        margin: 0 0 0 0;
+        padding: 0 0 0 0;
+
+        position: relative;
+        text-align: center;
+}
+
+.damage div {
+        width: 100%;
+        position: absolute;
+        left: 0px;
+        bottom: 0px;
+        font-family: ‘Lucida Console’, Monaco, monospace;
+        font-size: 20px;
+}
+
+.stretch {
+    width: 100%;
+    display: inline-block;
+    font-size: 0;
+    line-height: 0
+}
+
+body {
+    background-image:url(http://download.gamezone.com/uploads/image/data/1197737/Blade_And_soul_Wallpaper_1920x1200.jpg);
+    background-repeat:no-repeat;
+    background-size:cover;
+}
+
+.btn-primary, .btn-primary:active, .btn-primary:focus {
+    background-color: #556270;
+    width: 200px;
+}
+
+.btn-primary:hover {
+    background-color: #1E3C47 !important;
+}
+
+.indicator {
+    background-color:#8B908E;
+    width:30px;
+    height:30px;
+    position:absolute;
+    bottom:0;
+    /*isibility: hidden;*/
+    display: none;
+}
+
+.modal-dialog {
+  padding-top: 15%;
+}

@@ -2,6 +2,8 @@ package communication; /**
  * Created by Clara on 2016-04-19.
  */
 
+import logic.Availability;
+import logic.CoolDown;
 import logic.DamageCalculation;
 
 import javax.websocket.*;
@@ -29,9 +31,15 @@ public class SimulationServerEndpoint {
                 throw new RuntimeException(e);
             }
         }
+        if (message.equals("stop")) {
+            DamageCalculation.stopCalculating(System.currentTimeMillis());
+            CoolDown.stopAll();
+        }
+
         if (message.equals("start")) {
             try {
-                DamageCalculation.calculateDamage(session);
+                Availability.reset();
+                DamageCalculation.calculateDamage(session, System.currentTimeMillis());
             } catch (Exception e){
                 throw new RuntimeException(e);
             }
@@ -43,5 +51,6 @@ public class SimulationServerEndpoint {
     @OnClose
     public void onClose(Session session, CloseReason closeReason) {
         logger.info(String.format("Session %s closed because of %s", session.getId(), closeReason));
+        DamageCalculation.stopCalculating(System.currentTimeMillis());
     }
 }

@@ -15,6 +15,14 @@ public class Availability {
         return availabilities[skill.getId()];
     }
 
+    static public void reset() {
+        for (int i = 0; i < 10; i++) {
+            availabilities[i] = true;
+        }
+        availabilities[10] = false;
+        availabilities[11] = false;
+    }
+
     static synchronized public void setAvailable(Skill skill) {
         availabilities[skill.getId()] = true;
     }
