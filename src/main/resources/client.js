@@ -85,6 +85,8 @@ timers['V'] = VTimer;
 function startCalculating() {
     //if (!!ws) alert("STARTING");
     ws.send("start");
+    $("#start").prop("disabled",true);
+    $("#stop").prop("disabled",false);
 }
 
 function stopCalculating() {
@@ -92,7 +94,8 @@ function stopCalculating() {
     ws.send("stop");
     clearAllTimers();
     clearAllCountdowns();
-    //$('#totalDamage').html(0);
+    $("#start").prop("disabled",false);
+    $("#stop").prop("disabled",true);
 }
 
 function skillAvailable(skill) {

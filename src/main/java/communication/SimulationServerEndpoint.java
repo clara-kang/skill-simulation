@@ -32,7 +32,8 @@ public class SimulationServerEndpoint {
             }
         }
         if (message.equals("stop")) {
-            DamageCalculation.stopCalculating(System.currentTimeMillis());
+            DamageCalculation.stopCalculating();
+            DamageCalculation.sendDamagePerSecond(System.currentTimeMillis());
             CoolDown.stopAll();
         }
 
@@ -51,6 +52,6 @@ public class SimulationServerEndpoint {
     @OnClose
     public void onClose(Session session, CloseReason closeReason) {
         logger.info(String.format("Session %s closed because of %s", session.getId(), closeReason));
-        DamageCalculation.stopCalculating(System.currentTimeMillis());
+        DamageCalculation.stopCalculating();
     }
 }

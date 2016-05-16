@@ -59,7 +59,13 @@ public class DamageCalculation extends Thread{
 
     }
 
-    public static void stopCalculating(long endTime) {
+    public static void stopCalculating() {
+        if(calculationThread != null) {
+            calculationThread.interrupt();
+        }
+    }
+
+    public static void sendDamagePerSecond(long endTime) {
         if(calculationThread != null) {
             calculationThread.interrupt();
         }
